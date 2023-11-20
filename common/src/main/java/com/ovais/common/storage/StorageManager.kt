@@ -1,4 +1,4 @@
-package com.ovais.common.toaster
+package com.ovais.common.storage
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -11,7 +11,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -22,12 +21,12 @@ interface StorageManager {
     suspend fun putInt(key: String, value: Int)
     suspend fun putDouble(key: String, value: Double)
     suspend fun putFloat(key: String, value: Float)
-    suspend fun getString(key: String): Flow<String>
-    suspend fun getFloat(key: String): Flow<Float>
-    suspend fun getInt(key: String): Flow<Int>
-    suspend fun getDouble(key: String): Flow<Double>
-    suspend fun getLong(key: String): Flow<Long>
-    suspend fun getBoolean(key: String): Flow<Boolean>
+    suspend fun getString(key: String): Flow<String?>
+    suspend fun getFloat(key: String): Flow<Float?>
+    suspend fun getInt(key: String): Flow<Int?>
+    suspend fun getDouble(key: String): Flow<Double?>
+    suspend fun getLong(key: String): Flow<Long?>
+    suspend fun getBoolean(key: String): Flow<Boolean?>
 }
 
 class DefaultStorageManager @Inject constructor(
@@ -78,33 +77,33 @@ class DefaultStorageManager @Inject constructor(
         }
     }
 
-    override suspend fun getBoolean(key: String): Flow<Boolean> =
+    override suspend fun getBoolean(key: String) =
         context.appDataStore.data.map { preferences ->
             preferences[booleanPreferencesKey(key)]
-        }.filterNotNull()
+        }
 
-    override suspend fun getDouble(key: String): Flow<Double> =
+    override suspend fun getDouble(key: String) =
         context.appDataStore.data.map { preferences ->
             preferences[doublePreferencesKey(key)]
-        }.filterNotNull()
+        }
 
-    override suspend fun getFloat(key: String): Flow<Float> =
+    override suspend fun getFloat(key: String) =
         context.appDataStore.data.map { preferences ->
             preferences[floatPreferencesKey(key)]
-        }.filterNotNull()
+        }
 
-    override suspend fun getInt(key: String): Flow<Int> =
+    override suspend fun getInt(key: String) =
         context.appDataStore.data.map { preferences ->
             preferences[intPreferencesKey(key)]
-        }.filterNotNull()
+        }
 
-    override suspend fun getLong(key: String): Flow<Long> =
+    override suspend fun getLong(key: String): Flow<Long?> =
         context.appDataStore.data.map { preferences ->
             preferences[longPreferencesKey(key)]
-        }.filterNotNull()
+        }
 
-    override suspend fun getString(key: String): Flow<String> =
+    override suspend fun getString(key: String): Flow<String?> =
         context.appDataStore.data.map { preferences ->
             preferences[stringPreferencesKey(key)]
-        }.filterNotNull()
+        }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -33,6 +34,7 @@ fun CustomTextField(
     labelStyle: TextStyle,
     placeholderText: String,
     placeholderStyle: TextStyle,
+    placeholderColor: Color = Color.Black,
     fieldHeight: Int = 48,
     modifier: Modifier,
     defaultValue: String = EMPTY_STRING,
@@ -40,7 +42,10 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     roundedCornersSize: Dp = 12.dp,
     maxLines: Int = 1,
-    onValueChanged: (String) -> Unit
+    onValueChanged: (String) -> Unit,
+    containerColor: Color = TextField_Background,
+    textColor: Color = Color.Black,
+    onKeyboardAction: (Action) -> Unit = {}
 ) {
     var fieldValue by remember {
         mutableStateOf(defaultValue)
@@ -51,7 +56,8 @@ fun CustomTextField(
                 text = label,
                 style = labelStyle,
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 8.dp),
+                color = placeholderColor
             )
             EnabledTextField(
                 value = fieldValue,
@@ -65,14 +71,19 @@ fun CustomTextField(
                 onValueChanged = {
                     fieldValue = it
                     onValueChanged(it)
-                }
+                },
+                placeholderColor = placeholderColor,
+                containerColor = containerColor,
+                textColor = textColor,
+                onKeyboardAction = onKeyboardAction
             )
         } else {
             DisabledText(
                 text = label,
                 style = labelStyle,
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 8.dp),
+                color = placeholderColor
             )
             DisabledTextField(
                 value = fieldValue,
@@ -86,7 +97,10 @@ fun CustomTextField(
                 onValueChanged = {
                     fieldValue = it
                     onValueChanged(it)
-                }
+                },
+                placeholderColor = placeholderColor,
+                containerColor = containerColor,
+                textColor = textColor
             )
         }
     }
@@ -104,6 +118,10 @@ private fun EnabledTextField(
     maxLines: Int,
     fieldHeight: Int,
     onValueChanged: (String) -> Unit,
+    placeholderColor: Color,
+    containerColor: Color,
+    textColor: Color,
+    onKeyboardAction: (Action) -> Unit
 ) {
     TextField(
         value = value,
@@ -111,12 +129,13 @@ private fun EnabledTextField(
             EnabledText(
                 text = placeholder,
                 style = placeholderStyle,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                color = placeholderColor
             )
         },
         shape = RoundedCornerShape(roundedCorners),
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = TextField_Background,
+            containerColor = containerColor,
             disabledIndicatorColor = Color.Transparent,
             errorIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
@@ -134,6 +153,31 @@ private fun EnabledTextField(
         keyboardOptions = KeyboardOptions(
             imeAction = imeAction,
             keyboardType = keyboardType
+        ),
+        textStyle = if (fieldHeight > 48) {
+            Typography.headlineLarge.copy(color = textColor)
+        } else {
+            Typography.bodyMedium.copy(color = textColor)
+        },
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                onKeyboardAction(Action.Search)
+            },
+            onDone = {
+                onKeyboardAction(Action.Done)
+            },
+            onGo = {
+                onKeyboardAction(Action.Go)
+            },
+            onNext = {
+                onKeyboardAction(Action.Next)
+            },
+            onPrevious = {
+                onKeyboardAction(Action.Previous)
+            },
+            onSend = {
+                onKeyboardAction(Action.Send)
+            }
         )
     )
 }
@@ -149,7 +193,10 @@ private fun DisabledTextField(
     roundedCorners: Dp,
     maxLines: Int,
     fieldHeight: Int,
-    onValueChanged: (String) -> Unit
+    onValueChanged: (String) -> Unit,
+    placeholderColor: Color,
+    containerColor: Color,
+    textColor: Color
 ) {
     TextField(
         value = value,
@@ -157,12 +204,13 @@ private fun DisabledTextField(
             DisabledText(
                 text = placeholder,
                 style = placeholderStyle,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                color = placeholderColor
             )
         },
         shape = RoundedCornerShape(roundedCorners),
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = TextField_Background,
+            containerColor = containerColor,
             disabledIndicatorColor = Color.Transparent,
             errorIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent,
@@ -181,7 +229,12 @@ private fun DisabledTextField(
         keyboardOptions = KeyboardOptions(
             imeAction = imeAction,
             keyboardType = keyboardType
-        )
+        ),
+        textStyle = if (fieldHeight > 48) {
+            Typography.bodyMedium.copy(color = textColor)
+        } else {
+            Typography.headlineLarge.copy(color = textColor)
+        }
     )
 }
 
@@ -189,12 +242,14 @@ private fun DisabledTextField(
 private fun EnabledText(
     text: String,
     style: TextStyle,
-    modifier: Modifier
+    modifier: Modifier,
+    color: Color
+
 ) {
     Text(
         text = text,
         style = style,
-        color = Color.Black,
+        color = color,
         modifier = modifier
     )
 }
@@ -203,12 +258,22 @@ private fun EnabledText(
 private fun DisabledText(
     text: String,
     style: TextStyle,
-    modifier: Modifier
+    modifier: Modifier,
+    color: Color?
 ) {
     Text(
         text = text,
         style = style,
         modifier = modifier,
-        color = Gray,
+        color = color ?: Gray
     )
+}
+
+sealed interface Action {
+    object Search : Action
+    object Done : Action
+    object Go : Action
+    object Next : Action
+    object Previous : Action
+    object Send : Action
 }

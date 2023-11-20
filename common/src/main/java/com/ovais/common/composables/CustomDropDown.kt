@@ -36,6 +36,7 @@ import com.ovais.common.utils.EMPTY_STRING
 
 @Composable
 fun CustomDropDown(
+    modifier: Modifier = Modifier,
     defaultText: String = EMPTY_STRING,
     @DrawableRes icon: Int? = null,
     items: List<String> = emptyList(),
@@ -44,20 +45,24 @@ fun CustomDropDown(
     contentColor: Color = Color.Black,
     dropDownHeight: Dp = 45.dp,
     iconHeight: Dp = 24.dp,
-    iconWidth: Dp = 24.dp
+    iconWidth: Dp = 24.dp,
+    defaultIconTint: Color = Color.Black,
+    horizontalPadding: Dp = 16.dp,
+    verticalPadding: Dp = 8.dp,
+    textColor: Color = Color.Black
 ) {
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember {
         mutableStateOf(EMPTY_STRING)
     }
-    Box {
+    Box(modifier = modifier) {
         Button(
             onClick = { expanded = !expanded },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    horizontal = 16.dp,
-                    vertical = 8.dp
+                    horizontal = horizontalPadding,
+                    vertical = verticalPadding
                 )
                 .height(dropDownHeight),
             colors = ButtonDefaults.buttonColors(
@@ -67,11 +72,16 @@ fun CustomDropDown(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (selectedText.isEmpty()) {
-                    Text(defaultText)
+                    Text(
+                        defaultText,
+                        style = Typography.bodyMedium,
+                        color = textColor
+                    )
                 } else {
                     Text(
                         selectedText,
-                        style = Typography.bodyMedium
+                        style = Typography.bodyMedium,
+                        color = textColor
                     )
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -89,7 +99,8 @@ fun CustomDropDown(
                         contentDescription = null,
                         modifier = Modifier
                             .width(iconWidth)
-                            .height(iconHeight)
+                            .height(iconHeight),
+                        tint = defaultIconTint
                     )
                 }
             }
@@ -106,7 +117,8 @@ fun CustomDropDown(
                     text = {
                         Text(
                             text = listItem,
-                            style = Typography.bodyMedium
+                            style = Typography.bodyMedium,
+                            color = textColor
                         )
                     },
                     onClick = {

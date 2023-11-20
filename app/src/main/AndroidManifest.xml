@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Translatify"
         tools:targetApi="31">
         <activity
-            android:name=".app.TranslatifyActivity"
+            android:name=".app.activity.presentation.TranslatifyActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Translatify">

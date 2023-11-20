@@ -9,6 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -16,7 +21,9 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.ovais.common.ads.ui.BannerAdsView
 import com.ovais.common.composables.Action
 import com.ovais.common.composables.CustomTextField
 import com.ovais.common.composables.getActivity
@@ -30,9 +37,17 @@ import com.ovais.translatify.app.theme.textColorLight
 @Composable
 fun HomeView(
     navController: NavHostController? = null,
-    scaffoldPadding: PaddingValues = PaddingValues(0.dp)
+    scaffoldPadding: PaddingValues = PaddingValues(0.dp),
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
+    val areAdsEnabled by viewModel.areAdsEnabled.collectAsState()
     val scrollState = rememberScrollState()
+    var translationText by remember {
+        mutableStateOf(EMPTY_STRING)
+    }
+    val supportedLanguages by viewModel.supportedLanguages.collectAsState()
+    val translatedText by viewModel.translatedText.collectAsState()
+    val canShowTranslatedView by viewModel.canShowTranslatedView.collectAsState()
     LocalContext.current.getActivity<TranslatifyActivity>()
         ?.activityViewModel
         ?.updateBottomBarVisibility(true)
@@ -43,12 +58,12 @@ fun HomeView(
             .verticalScroll(scrollState)
     ) {
         LanguageSelector(
-            supportedLanguages = listOf("English", "Urdu"),
+            supportedLanguages = supportedLanguages,
             from = {
-
+                viewModel.setTranslatedFrom(it)
             },
             to = {
-
+                viewModel.setTranslateTo(it)
             },
             containerColor = languageSelectorBackground,
             textColor = textColorDark,
@@ -60,7 +75,12 @@ fun HomeView(
                 )
                 .height(50.dp)
         )
-
+        if (areAdsEnabled) {
+            BannerAdsView(
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
         CustomTextField(
             enabled = true,
             label = EMPTY_STRING,
@@ -70,33 +90,36 @@ fun HomeView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            onValueChanged = {
-
+            onValueChanged = { text ->
+                translationText = text
+                viewModel.onTextUpdate(text)
             },
             fieldHeight = 300,
             maxLines = 1000,
             placeholderColor = textColorDark,
             containerColor = Color.LightGray.copy(alpha = 0.1f),
             textColor = textColorLight,
-            imeAction = ImeAction.Done,
+            imeAction = ImeAction.Search,
             keyboardType = KeyboardType.Text,
             onKeyboardAction = { action ->
                 if (action is Action.Search) {
-                    // todo trigger value
+                    viewModel.onTranslate(translationText)
                 }
             }
         )
 
-        TranslatedTextView(
-            text = "How are you bro",
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = 16.dp,
-                    vertical = 16.dp
-                )
-        ) { action ->
-
+        if (canShowTranslatedView) {
+            TranslatedTextView(
+                text = translatedText,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 16.dp,
+                        vertical = 16.dp
+                    )
+            ) { action ->
+                viewModel.onActionPerformed(action, translatedText)
+            }
         }
 
     }

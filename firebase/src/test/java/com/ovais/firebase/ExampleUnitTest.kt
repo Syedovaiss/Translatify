@@ -1,4 +1,4 @@
-package com.ovais.navigation
+package com.ovais.firebase
 
 import org.junit.Test
 

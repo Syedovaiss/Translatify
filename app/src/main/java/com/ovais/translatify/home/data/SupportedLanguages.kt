@@ -12,4 +12,12 @@ data class SupportedLanguages(
     val lang: String,
     @SerialName("title")
     val title: String
-)
+) {
+    companion object {
+        val default = SupportedLanguages(
+            code = "en",
+            lang = "ENGLISH",
+            title = "English"
+        )
+    }
+}

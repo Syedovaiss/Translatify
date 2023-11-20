@@ -23,6 +23,16 @@ class DefaultTranslationManager @Inject constructor() : TranslationManager {
         text: String,
         result: (String) -> Unit
     ) {
+        /*
+        val remoteModel = RemoteModelManager.getInstance()
+        remoteModel.getDownloadedModels(TranslateRemoteModel::class.java).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.i("data---dm","$#${it.result}")
+            } else {
+                Log.i("data---","${it.exception}")
+            }
+        }
+        */
         val options = TranslatorOptions.Builder()
             .setSourceLanguage(source)
             .setTargetLanguage(target)

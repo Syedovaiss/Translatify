@@ -84,7 +84,7 @@ fun LanguageSelector(
                 )
             }
             CustomDropDown(
-                defaultText = "Chinese",
+                defaultText = "English",
                 modifier = Modifier
                     .weight(3f),
                 horizontalPadding = 0.dp,

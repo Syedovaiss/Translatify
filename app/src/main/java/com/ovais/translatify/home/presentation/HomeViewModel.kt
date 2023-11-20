@@ -24,8 +24,8 @@ class HomeViewModel @Inject constructor(
     private val supportedLanguageUseCase: SupportedLanguageUseCase,
     private val translateContentUseCase: TranslateContentUseCase
 ) : ViewModel() {
-    private var translateFrom = EMPTY_STRING
-    private var translateTo = EMPTY_STRING
+    private var translateFrom = SupportedLanguages.default.title
+    private var translateTo = SupportedLanguages.default.title
 
     private val _areAdsEnabled by lazy {
         MutableStateFlow(adsManager.areAdsEnabled)

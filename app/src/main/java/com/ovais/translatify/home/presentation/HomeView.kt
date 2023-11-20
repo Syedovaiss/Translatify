@@ -86,7 +86,7 @@ fun HomeView(
             label = EMPTY_STRING,
             labelStyle = Typography.bodyMedium,
             placeholderText = "Type Here....",
-            placeholderStyle = Typography.headlineLarge,
+            placeholderStyle = Typography.titleLarge,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -94,8 +94,8 @@ fun HomeView(
                 translationText = text
                 viewModel.onTextUpdate(text)
             },
-            fieldHeight = 300,
-            maxLines = 1000,
+            fieldHeight = 200,
+            maxLines = 200,
             placeholderColor = textColorDark,
             containerColor = Color.LightGray.copy(alpha = 0.1f),
             textColor = textColorLight,

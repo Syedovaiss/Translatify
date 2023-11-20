@@ -158,7 +158,7 @@ private fun EnabledTextField(
             keyboardType = keyboardType
         ),
         textStyle = if (fieldHeight > 48) {
-            Typography.headlineLarge.copy(color = textColor)
+            Typography.titleLarge.copy(color = textColor)
         } else {
             Typography.bodyMedium.copy(color = textColor)
         },

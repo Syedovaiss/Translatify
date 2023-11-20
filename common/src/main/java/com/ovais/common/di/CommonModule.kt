@@ -39,11 +39,13 @@ interface CommonModule {
         default: DefaultDateTimeManager
     ): DateTimeManager
 
+    @Singleton
     @Binds
     fun bindStorageManager(
         default: DefaultStorageManager
     ): StorageManager
 
+    @Singleton
     @Binds
     fun bindLocalStorageManager(
         default: DefaultLocalStorageManager

@@ -34,13 +34,6 @@ class SplashViewModel @Inject constructor(
     private fun startNavigation() {
         viewModelScope.launch {
             delay(2000)
-            /*localStorageManager.isLoggedIn().collectLatest { isLoggedIn ->
-                if (isLoggedIn.default()) {
-                    navigateToHome()
-                } else {
-                    navigateToLogin()
-                }
-            }*/
             navigateToHome()
         }
     }

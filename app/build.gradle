@@ -88,5 +88,5 @@ dependencies {
     implementation "com.google.firebase:firebase-firestore"
     implementation "com.google.firebase:firebase-config"
     implementation project(":common")
-    implementation project(":navigation")
+    implementation project(":firebase")
 }

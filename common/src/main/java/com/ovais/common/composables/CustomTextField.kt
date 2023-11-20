@@ -16,9 +16,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -106,7 +108,7 @@ fun CustomTextField(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 private fun EnabledTextField(
     value: String,
@@ -123,6 +125,7 @@ private fun EnabledTextField(
     textColor: Color,
     onKeyboardAction: (Action) -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     TextField(
         value = value,
         placeholder = {
@@ -162,21 +165,27 @@ private fun EnabledTextField(
         keyboardActions = KeyboardActions(
             onSearch = {
                 onKeyboardAction(Action.Search)
+                keyboardController?.hide()
             },
             onDone = {
                 onKeyboardAction(Action.Done)
+                keyboardController?.hide()
             },
             onGo = {
                 onKeyboardAction(Action.Go)
+                keyboardController?.hide()
             },
             onNext = {
                 onKeyboardAction(Action.Next)
+                keyboardController?.hide()
             },
             onPrevious = {
                 onKeyboardAction(Action.Previous)
+                keyboardController?.hide()
             },
             onSend = {
                 onKeyboardAction(Action.Send)
+                keyboardController?.hide()
             }
         )
     )

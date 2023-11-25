@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.ovais.translatify.home.presentation.HomeView
+import com.ovais.translatify.languages.presentation.LanguagesView
 import com.ovais.translatify.options.presentation.OptionsView
 import com.ovais.translatify.saved_translations.presentation.SavedTranslationView
 import com.ovais.translatify.scan_with_camera.presentation.ScanWithCameraView
@@ -55,6 +56,12 @@ object Navigator {
             }
             composable(Screens.ScanWithCamera.routeId) {
                 ScanWithCameraView(
+                    navController = navController,
+                    scaffoldPadding = scaffoldPadding
+                )
+            }
+            composable(Screens.AllLanguages.routeId) {
+                LanguagesView(
                     navController = navController,
                     scaffoldPadding = scaffoldPadding
                 )

@@ -27,6 +27,7 @@ fun OptionsView(
     scaffoldPadding: PaddingValues = PaddingValues(0.dp),
     viewModel: OptionsViewModel = hiltViewModel()
 ) {
+    viewModel.setupNavigation(navController = navController)
     val generalSettings by viewModel.generalSettings.collectAsState()
     val accountSettings by viewModel.accountSettings.collectAsState()
     val otherSettings by viewModel.otherSettings.collectAsState()

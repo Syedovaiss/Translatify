@@ -6,6 +6,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
+import com.ovais.common.ads.ADMOB_ID
 import com.ovais.common.ads.TEST_AD_ID
 
 

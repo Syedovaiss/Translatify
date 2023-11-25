@@ -50,6 +50,11 @@ sealed class Screens(
         title = "Options",
         iconRes = R.drawable.ic_menu
     )
+    object AllLanguages : Screens(
+        routeId = buildRoute("all_languages"),
+        title = "All Languages"
+    )
+
 
     fun withArgs(vararg args: String): String {
         return buildString {

@@ -3,7 +3,9 @@ package com.ovais.common.di
 import com.ovais.common.ClipboardManager
 import com.ovais.common.DefaultClipboardManager
 import com.ovais.common.DefaultDispatcherProvider
+import com.ovais.common.DefaultFlagResourceProvider
 import com.ovais.common.DispatcherProvider
+import com.ovais.common.FlagResourceProvider
 import com.ovais.common.ads.AdsManager
 import com.ovais.common.ads.DefaultAdsManager
 import com.ovais.common.datetime.DateTimeManager
@@ -63,6 +65,11 @@ interface CommonModule {
     fun bindClipboardManager(
         default: DefaultClipboardManager
     ): ClipboardManager
+
+    @Binds
+    fun bindFlagResourceProvider(
+        default: DefaultFlagResourceProvider
+    ): FlagResourceProvider
 }
 
 

@@ -2,6 +2,8 @@ package com.ovais.translatify.options.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.ovais.translatify.navigation.Screens
 import com.ovais.translatify.options.data.SettingOptionItems
 import com.ovais.translatify.options.data.SettingOptionType
 import com.ovais.translatify.options.domain.AccountSettingsUseCase
@@ -29,6 +31,9 @@ class OptionsViewModel @Inject constructor(
     private val _accountSettings by lazy {
         MutableStateFlow<List<SettingOptionItems>>(listOf())
     }
+
+    private var navController: NavController? = null
+
     val accountSettings: StateFlow<List<SettingOptionItems>>
         get() = _accountSettings
 
@@ -53,6 +58,18 @@ class OptionsViewModel @Inject constructor(
     }
 
     fun onAction(action: SettingOptionType) {
+        when (action) {
+            is SettingOptionType.Languages -> {
+                navController?.navigate(
+                    Screens.AllLanguages.routeId
+                )
+            }
 
+            else -> Unit
+        }
+    }
+
+    fun setupNavigation(navController: NavController?) {
+        this.navController = navController
     }
 }

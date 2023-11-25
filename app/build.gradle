@@ -89,4 +89,5 @@ dependencies {
     implementation "com.google.firebase:firebase-config"
     implementation project(":common")
     implementation project(":firebase")
+    implementation project(":translator")
 }

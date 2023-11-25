@@ -14,8 +14,6 @@ import com.ovais.common.storage.LocalStorageManager
 import com.ovais.common.storage.StorageManager
 import com.ovais.common.toaster.DefaultToastManager
 import com.ovais.common.toaster.ToastManager
-import com.ovais.common.translation.DefaultTranslationManager
-import com.ovais.common.translation.TranslationManager
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -65,11 +63,6 @@ interface CommonModule {
     fun bindClipboardManager(
         default: DefaultClipboardManager
     ): ClipboardManager
-
-    @Binds
-    fun bindTranslationManager(
-        default: DefaultTranslationManager
-    ): TranslationManager
 }
 
 

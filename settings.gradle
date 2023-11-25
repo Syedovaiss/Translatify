@@ -16,3 +16,5 @@ rootProject.name = "Translatify"
 include ':app'
 include ':common'
 include ':firebase'
+include ':translator'
+include ':notification'

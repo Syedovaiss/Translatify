@@ -28,6 +28,7 @@ import com.ovais.common.composables.Action
 import com.ovais.common.composables.CustomTextField
 import com.ovais.common.composables.getActivity
 import com.ovais.common.utils.EMPTY_STRING
+import com.ovais.common.utils.shareContent
 import com.ovais.translatify.app.activity.presentation.TranslatifyActivity
 import com.ovais.translatify.app.theme.Typography
 import com.ovais.translatify.app.theme.languageSelectorBackground
@@ -51,6 +52,7 @@ fun HomeView(
     LocalContext.current.getActivity<TranslatifyActivity>()
         ?.activityViewModel
         ?.updateBottomBarVisibility(true)
+    val shareText by viewModel.shareText.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -121,7 +123,10 @@ fun HomeView(
                 viewModel.onActionPerformed(action, translatedText)
             }
         }
-
+        if (shareText.isNotEmpty()) {
+            LocalContext.current.getActivity<TranslatifyActivity>()
+                ?.shareContent(shareText)
+        }
     }
 }
 

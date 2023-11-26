@@ -19,6 +19,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.withContext
 import java.util.UUID
+import javax.inject.Inject
 
 
 @HiltWorker

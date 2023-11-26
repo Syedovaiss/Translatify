@@ -30,6 +30,9 @@ class HomeViewModel @Inject constructor(
     private var translateFrom = SupportedLanguages.default.title
     private var translateTo = SupportedLanguages.default.title
 
+    private val _shareText by lazy { MutableStateFlow<String>(EMPTY_STRING) }
+    val shareText: StateFlow<String> get() = _shareText
+
     private val _areAdsEnabled by lazy {
         MutableStateFlow(adsManager.areAdsEnabled)
     }
@@ -120,7 +123,7 @@ class HomeViewModel @Inject constructor(
             }
 
             is TranslationActions.Share -> {
-
+               _shareText.value = text
             }
 
             is TranslationActions.Dictionary -> {

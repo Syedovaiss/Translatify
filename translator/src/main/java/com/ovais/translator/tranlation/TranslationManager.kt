@@ -1,12 +1,8 @@
 package com.ovais.translator.tranlation
 
-import androidx.work.ExistingWorkPolicy
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import com.ovais.common.dtos.QueryResult
-import com.ovais.translator.worker.ModelDeleteWorker
-import com.ovais.translator.worker.ModelDownloadWorker
-import com.ovais.translator.worker.TranslationWorkerManager
 import javax.inject.Inject
 
 interface TranslationManager {
@@ -16,19 +12,13 @@ interface TranslationManager {
         text: String
     ): TranslationResults
 
-    fun download(model: String)
-    fun delete(model: String)
+    suspend fun download(model: String): QueryResult<Void>
+    suspend fun delete(model: String): QueryResult<Void>
 }
 
 class DefaultTranslationManager @Inject constructor(
-    private val translationWorkerManager: TranslationWorkerManager,
     private val translationModelManager: TranslationModelManager
 ) : TranslationManager {
-
-    private companion object {
-        private const val MODEL_DOWNLOAD_WORK_NAME = "MODEL_DOWNLOAD_WORK_NAME"
-        private const val MODEL_DELETE_WORK_NAME = "MODEL_DELETE_WORK_NAME"
-    }
 
     override suspend fun translate(
         source: String,
@@ -77,21 +67,11 @@ class DefaultTranslationManager @Inject constructor(
         return translator.translate(text).completeAsQueryResult()
     }
 
-    override fun download(model: String) {
-        val workRequest = ModelDownloadWorker.buildWorker(model)
-        translationWorkerManager.enqueue(
-            name = MODEL_DOWNLOAD_WORK_NAME,
-            existingWorkPolicy = ExistingWorkPolicy.APPEND_OR_REPLACE,
-            workRequest = workRequest
-        )
+    override suspend fun download(model: String): QueryResult<Void> {
+        return translationModelManager.download(model)
     }
 
-    override fun delete(model: String) {
-        val workRequest = ModelDeleteWorker.buildWorker(model)
-        translationWorkerManager.enqueue(
-            name = MODEL_DELETE_WORK_NAME,
-            existingWorkPolicy = ExistingWorkPolicy.APPEND_OR_REPLACE,
-            workRequest = workRequest
-        )
+    override suspend fun delete(model: String): QueryResult<Void> {
+        return translationModelManager.delete(model)
     }
 }

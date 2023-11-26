@@ -13,18 +13,18 @@ internal val List<WorkInfo>.running get() = filter { it.state == WorkInfo.State.
 internal fun WorkInfo.toWorkResult(workTagData: (Set<String>) -> WorkTagData?): WorkInfoData {
     return WorkInfoData(
         state = when (state) {
-            WorkInfo.State.ENQUEUED -> com.ovais.translator.worker.WorkState.Enqueued
-            WorkInfo.State.RUNNING -> com.ovais.translator.worker.WorkState.Running
-            WorkInfo.State.SUCCEEDED -> com.ovais.translator.worker.WorkState.Succeeded
-            WorkInfo.State.FAILED -> com.ovais.translator.worker.WorkState.Failed
-            WorkInfo.State.CANCELLED -> com.ovais.translator.worker.WorkState.Cancelled
-            WorkInfo.State.BLOCKED -> com.ovais.translator.worker.WorkState.Blocked
+            WorkInfo.State.ENQUEUED -> WorkState.Enqueued
+            WorkInfo.State.RUNNING -> WorkState.Running
+            WorkInfo.State.SUCCEEDED -> WorkState.Succeeded
+            WorkInfo.State.FAILED -> WorkState.Failed
+            WorkInfo.State.CANCELLED -> WorkState.Cancelled
+            WorkInfo.State.BLOCKED -> WorkState.Blocked
         },
         data = outputData.keyValueMap,
         id = id,
         workTagData = workTagData(tags),
-        progress = progress.getInt(com.ovais.translator.worker.PROGRESS_KEY, 0),
-        error = outputData.getString(com.ovais.translator.worker.ERROR_KEY).default()
+        progress = progress.getInt(PROGRESS_KEY, 0),
+        error = outputData.getString(ERROR_KEY).default()
     )
 }
 

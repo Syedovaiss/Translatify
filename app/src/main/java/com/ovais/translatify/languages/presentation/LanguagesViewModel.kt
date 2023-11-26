@@ -2,8 +2,12 @@ package com.ovais.translatify.languages.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ovais.common.toaster.ToastManager
+import com.ovais.common.toaster.Toaster
 import com.ovais.translatify.languages.domain.DeleteLanguageUseCase
+import com.ovais.translatify.languages.domain.DeletionResult
 import com.ovais.translatify.languages.domain.DownloadLanguageUseCase
+import com.ovais.translatify.languages.domain.DownloadResults
 import com.ovais.translatify.languages.domain.GetAllInstalledLanguagesUseCase
 import com.ovais.translatify.languages.domain.GetAllLanguagesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +22,8 @@ class LanguagesViewModel @Inject constructor(
     private val getAllLanguagesUseCase: GetAllLanguagesUseCase,
     private val languageUiDataMapper: LanguageUiDataMapper,
     private val deleteLanguageUseCase: DeleteLanguageUseCase,
-    private val downloadLanguageUseCase: DownloadLanguageUseCase
+    private val downloadLanguageUseCase: DownloadLanguageUseCase,
+    private val toastManager: ToastManager
 ) : ViewModel() {
 
 
@@ -52,13 +57,55 @@ class LanguagesViewModel @Inject constructor(
 
     fun onDownloadLanguage(data: LanguageUiData) {
         viewModelScope.launch {
-            downloadLanguageUseCase(data.code)
+            when (val result = downloadLanguageUseCase(data.code)) {
+                is DownloadResults.Downloaded -> {
+                    showMessage(
+                        title = "${data.title} Installed!",
+                        description = "Your ${data.title} language is installed on device.",
+                        status = Toaster.Status.SUCCESS
+                    )
+                }
+
+                is DownloadResults.Failed -> {
+                    showMessage(
+                        title = "Failed to install language!",
+                        description = "Your ${data.title} language is " +
+                                "not installed because ${result.error}",
+                        status = Toaster.Status.ERROR
+                    )
+                }
+            }
         }
+    }
+
+    private fun showMessage(title: String, description: String, status: Toaster.Status) {
+        toastManager.showToast(
+            title = title,
+            description = description,
+            status = status
+        )
     }
 
     fun onDeleteLanguage(data: LanguageUiData) {
         viewModelScope.launch {
-            deleteLanguageUseCase(data.code)
+            when (val result = deleteLanguageUseCase(data.code)) {
+                is DeletionResult.Deleted -> {
+                    showMessage(
+                        title = "${data.title} Deleted!",
+                        description = "Your ${data.title} language is deleted from device.",
+                        status = Toaster.Status.SUCCESS
+                    )
+                }
+
+                is DeletionResult.Failed -> {
+                    showMessage(
+                        title = "Failed to delete language!",
+                        description = "Your ${data.title} language is " +
+                                "not deleted because ${result.error}",
+                        status = Toaster.Status.ERROR
+                    )
+                }
+            }
         }
     }
 }

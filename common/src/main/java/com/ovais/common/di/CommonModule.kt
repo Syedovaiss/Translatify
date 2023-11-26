@@ -4,8 +4,10 @@ import com.ovais.common.ClipboardManager
 import com.ovais.common.DefaultClipboardManager
 import com.ovais.common.DefaultDispatcherProvider
 import com.ovais.common.DefaultFlagResourceProvider
+import com.ovais.common.DefaultScopeProvider
 import com.ovais.common.DispatcherProvider
 import com.ovais.common.FlagResourceProvider
+import com.ovais.common.ScopeProvider
 import com.ovais.common.ads.AdsManager
 import com.ovais.common.ads.DefaultAdsManager
 import com.ovais.common.datetime.DateTimeManager
@@ -70,6 +72,12 @@ interface CommonModule {
     fun bindFlagResourceProvider(
         default: DefaultFlagResourceProvider
     ): FlagResourceProvider
+
+    @Binds
+    fun bindScopeProvider(
+        default: DefaultScopeProvider
+    ): ScopeProvider
+
 }
 
 

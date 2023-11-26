@@ -15,3 +15,6 @@ interface SuspendLambdaUseCase<R> {
 interface ParamUseCase<P, R> {
     operator fun invoke(param: P): R
 }
+interface SuspendParamUseCase<P, R> {
+    suspend operator fun invoke(param: P): R
+}

@@ -28,9 +28,7 @@ class DefaultTranslationWorkerManager @Inject constructor(
         existingWorkPolicy: ExistingWorkPolicy,
         workRequest: OneTimeWorkRequest
     ) {
-        workManager.enqueueUniqueWork(
-            name,
-            existingWorkPolicy,
+        workManager.enqueue(
             workRequest
         )
     }
